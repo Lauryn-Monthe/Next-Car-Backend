@@ -1,0 +1,61 @@
+#------------------------------------------------------------------------
+#       Server                                                          #
+#------------------------------------------------------------------------
+server:
+  port: 8080
+  servlet:
+    encoding:
+      enabled: true
+      charset: UTF-8
+      force: true
+
+#------------------------------------------------------------------------
+#       Spring                                                          #
+#------------------------------------------------------------------------
+spring:
+  application:
+    name: Next Car Api
+
+  profiles:
+    active: h2-mem
+
+  main:
+    allow-bean-definition-overriding: true
+  jackson:
+    serialization:
+      write-dates-as-timestamps: false
+
+  datasource:
+    url: jdbc:postgresql://postgresql:5432/ncdb
+    username: nc
+    password: nc
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+#------------------------------------------------------------------------
+#       Metrics / Actuator                                              #
+#------------------------------------------------------------------------
+management:
+  endpoints:
+    web:
+      exposure:
+        include: prometheus,health,info
+  health:
+    db:
+      enabled: true
+  metrics:
+    export:
+      prometheus:
+        enabled: true
+
+nc:
+  cors:
+    allowedOriginPatterns:
+      - http://localhost:4200
+
+      

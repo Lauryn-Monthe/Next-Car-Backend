@@ -1,0 +1,28 @@
+version: '3'
+services:
+
+  next-car-backend:
+    ports:
+      - "8080:8080"
+      - "8787:8787"
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: next-car-backend:latest
+    container_name: next-car-backend
+    env_file: .env
+    links:
+        - postgresql
+
+  postgresql:
+    image: 'postgres:13'
+    container_name: postgresql
+    ports:
+        - '5432:5432'
+    restart: always
+    environment:
+        - POSTGRES_USER=nc
+        - POSTGRES_PASSWORD=nc
+        - POSTGRES_DB=pmdb
+    volumes:
+        - '../volumes/postgresql/log:/var/log/postgresql'

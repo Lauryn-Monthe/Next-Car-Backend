@@ -1,0 +1,733 @@
+openapi: 3.0.1
+info:
+  title: Next Car API
+  description: Next Car REST API
+  contact:
+    name: Lauryn Monthe
+    url: 'https://www.parcaune.com'
+    email: laurynmonthe@yahoo.com
+  license:
+    name: Apache 2.0
+    url: 'http://springdoc.org'
+  version: 1.0.0.SNAPSHOT
+servers:
+  - url: 'http://localhost:9092'
+    description: Dev Environment
+tags:
+  - name: Greeting
+    description: Greeting Controller
+  - name: customer
+    description: Manage Clients
+  - name: driver
+    description: Manage Drivers
+  - name: appointment
+    description: Manage appointments
+
+paths:
+  /api/customer:
+    post:
+      tags:
+        - customer
+      operationId: createCustomer
+      description: |
+        Create a new customer account via the API.
+      summary: Creating a new customer account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        "201":
+          description: The account was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CustomerId'
+        "422":
+          description: The account can't be created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+    get:
+      tags:
+        - customer
+      operationId: getCustomers
+      description: Get list of customers
+      summary: Returns a list of customers
+      parameters:
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/Status'
+          description: Status of the customer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/customers/{id}:
+    get:
+      tags:
+        - customer
+      operationId: getCustomerById
+      description: |
+        Retrieve information about a Customer using its ID.
+      summary: Retrieve customer
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+          required: true
+          description: ID of the customer
+      responses:
+        "200":
+          description: customer Data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        "404":
+          description: The customer does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - customer
+      operationId: updateClient
+      description: Update a customer's account via the API.
+      summary: Updating a customer's account
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CustomerRequest'
+      responses:
+        "204":
+          description: The account was successfully updated
+        "404":
+          description: The customer does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - customer
+      operationId: deleteClient
+      description: delete a customer's account via the API.
+      summary: Deleting a customer's account
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: The account was successfully deleted
+        "404":
+          description: The customer does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/customers/findByEmail:
+    get:
+      tags:
+        - customer
+      operationId: getClientByEmail
+      description: |
+        Retrieve information about a customer using its email.
+      summary: Retrieve customer
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          required: true
+          description: Email of the customer
+      responses:
+        "200":
+          description: customer Data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        "404":
+          description: The customer does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/customers/{id}/update-status:
+    put:
+      tags:
+        - customer
+      operationId: updateClientStatus
+      description: Update a customer's status via the API.
+      summary: Updating a customer's status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Status'
+      responses:
+        "204":
+          description: The status was successfully updated
+        "404":
+          description: The status does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/customers/search-customers:
+    get:
+      tags:
+        - customer
+      operationId: searchClients
+      description: |
+        Get list of customers using its lastname or city.
+      summary: Retrieve customers
+      parameters:
+        - in: query
+          name: filter
+          required: true
+          schema:
+            $ref: '#/components/schemas/searchRequest'
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Customer'
+        "400":
+          description: Search parameter is missing
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/drivers:
+    post:
+      tags:
+        - driver
+      operationId: createDriver
+      description: |
+        Create a new driver account via the API.
+      summary: Creating a new driver account
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverRequest'
+      responses:
+        "201":
+          description: The account was successfully created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DriverId'
+        "422":
+          description: The account can't be created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    get:
+      tags:
+        - driver
+      operationId: getDrivers
+      description: Get list of drivers
+      summary: Returns a list of drivers
+      parameters:
+        - in: query
+          name: status
+          schema:
+            $ref: '#/components/schemas/Status'
+          description: Status of the driver
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Driver'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/drivers/{driverId}:
+    get:
+      tags:
+        - driver
+      operationId: getDriverById
+      description: |
+        Retrieve information about a driver using its ID.
+      summary: Retrieve driver
+      parameters:
+        - in: path
+          name: driverId
+          schema:
+            type: string
+          required: true
+          description: ID of the driver
+      responses:
+        "200":
+          description: Driver Data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Driver'
+        "404":
+          description: The driver does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      tags:
+        - driver
+      operationId: deleteDriver
+      description: delete a driver's account via the API.
+      summary: Deleting a driver's account
+      parameters:
+        - name: driverId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "204":
+          description: The account was successfully deleted
+        "404":
+          description: The driver does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    put:
+      tags:
+        - driver
+      operationId: updateDriver
+      description: Update a driver's account via the API.
+      summary: Updating a driver's account
+      parameters:
+        - name: driverId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DriverRequest'
+      responses:
+        "204":
+          description: The account was successfully updated
+        "404":
+          description: The driver does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/drivers/findByEmail:
+    get:
+      tags:
+        - driver
+      operationId: getPatientByEmail
+      description: |
+        Retrieve information about a driver using its email.
+      summary: Retrieve driver
+      parameters:
+        - in: query
+          name: email
+          schema:
+            type: string
+          required: true
+          description: Email of the driver
+      responses:
+        "200":
+          description: Driver Data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Customer'
+        "404":
+          description: The driver does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+  /api/drivers/{id}/update-status:
+    put:
+      tags:
+        - driver
+      operationId: updateDriverStatus
+      description: Update a driver's status via the API.
+      summary: Updating a drriver's status
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Status'
+      responses:
+        "204":
+          description: The status was successfully updated
+        "400":
+          description: The status does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "404":
+          description: The driver does not exist
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+
+  schemas:
+    CustomerRequest:
+      type: object
+      required:
+        - lastname
+        - firstname
+        - phoneNumber
+        - birthday
+        - gender
+        - address
+        - email
+      properties:
+        lastname:
+          type: string
+          maxLength: 255
+        firstname:
+          type: string
+          maxLength: 255
+        gender:
+          $ref: '#/components/schemas/Gender'
+        birthday:
+          type: string
+          format: date
+        address:
+          $ref: '#/components/schemas/Address'
+        phoneNumber:
+          type: string
+          maxLength: 20
+        email:
+          type: string
+          maxLength: 255
+    CustomerId:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+
+    Customer:
+      allOf:
+        - $ref: '#/components/schemas/CustomerRequest'
+        - type: object
+          properties:
+            id:
+              type: string
+            status:
+              $ref: '#/components/schemas/Status'
+
+    Id:
+      type: string
+      description: Unique ID for use in the API
+    Gender:
+      type: string
+      enum:
+        - MR
+        - MS
+        - UNKNOWN
+    Address:
+      type: object
+      required:
+        - city
+        - country
+      properties:
+        streetAndNumber:
+          type: string
+          maxLength: 50
+        postalCode:
+          type: string
+          maxLength: 10
+        city:
+          type: string
+          maxLength: 50
+        country:
+          type: string
+          description: ISO 3166 ALPHA-3
+
+    DriverRequest:
+      type: object
+      required:
+        - lastname
+        - firstname
+        - phoneNumber
+        - birthday
+        - gender
+        - address
+        - email
+      properties:
+        lastname:
+          type: string
+          maxLength: 255
+        firstname:
+          type: string
+          maxLength: 255
+        gender:
+          $ref: '#/components/schemas/Gender'
+        birthday:
+          type: string
+          format: date
+        address:
+          $ref: '#/components/schemas/Address'
+        phoneNumber:
+          type: string
+          maxLength: 20
+        email:
+          type: string
+          maxLength: 255
+    DriverId:
+      type: object
+      required:
+        - id
+      properties:
+        id:
+          $ref: '#/components/schemas/Id'
+    Driver:
+      allOf:
+        - $ref: '#/components/schemas/DriverRequest'
+        - type: object
+          properties:
+            id:
+              type: string
+            status:
+              $ref: '#/components/schemas/Status'
+
+    searchRequest:
+      type: object
+      properties:
+        lastname:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+
+    InvitationRequest:
+      type: object
+      required:
+        - driverId
+        - customerId
+      properties:
+        driverId:
+          type: string
+        customerId:
+          type: string
+        status:
+          $ref: '#/components/schemas/InvitationStatus'
+
+    AnswerInvitationRequest:
+      type: object
+      required:
+        - invitationId
+        - status
+      properties:
+        invitationId:
+          type: string
+        status:
+          $ref: '#/components/schemas/AnswerInvitationStatus'
+
+    Invitation:
+      allOf:
+        - $ref: '#/components/schemas/InvitationRequest'
+        - type: object
+          properties:
+            id:
+              type: string
+            customerName:
+              type: string
+            driverName:
+              type: string
+
+    Status:
+      type: string
+      enum:
+        - ACTIVE
+        - BLOCKED
+
+    InvitationStatus:
+      type: string
+      enum:
+        - INITIALISED
+        - CANCELED
+        - DELETED
+        - APPROVED
+        - CONFIRMED
+        - DECLINED
+
+    AnswerInvitationStatus:
+      type: string
+      enum:
+        - APPROVED
+        - DECLINED
+
+    Error:
+      type: object
+      required:
+        - statusCode
+        - statusName
+        - message
+        - timestamp
+      properties:
+        statusCode:
+          type: integer
+          format: int32
+        statusName:
+          type: string
+        message:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
