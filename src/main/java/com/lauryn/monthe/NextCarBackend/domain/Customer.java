@@ -2,6 +2,8 @@ package com.lauryn.monthe.NextCarBackend.domain;
 
 import java.time.LocalDate;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -42,6 +44,7 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     private Status status; */
 
+    @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING)
     @Column(name = "BIRTHDAY")
     private LocalDate birthday;
 

@@ -1,9 +1,7 @@
-FROM openjdk:17-jdk-slim-buster
+FROM eclipse-temurin:17-jdk-jammy
 
-WORKDIR /opt
-
-COPY target/*.jar .
+COPY target/NextCar-Backend-*.jar /NextCarBackend.jar
 
 EXPOSE 8080
 
-CMD exec $JAVA_HOME/bin/java $JAVA_OPTS -jar /opt/NextCar-Backend-*.jar
+CMD ["java", "-jar", "/NextCarBackend.jar"]
