@@ -526,8 +526,6 @@ components:
           properties:
             id:
               type: string
-            status:
-              $ref: '#/components/schemas/Status'
 
     Id:
       type: string

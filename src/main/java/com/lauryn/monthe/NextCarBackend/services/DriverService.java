@@ -13,6 +13,7 @@ import com.lauryn.monthe.NextCarBackend.repositories.DriverRepository;
 import com.lauryn.monthe.nextcar.api.model.ApiDriver;
 import com.lauryn.monthe.nextcar.api.model.ApiDriverId;
 import com.lauryn.monthe.nextcar.api.model.ApiDriverRequest;
+import com.lauryn.monthe.nextcar.api.model.ApiStatus;
 
 import lombok.AllArgsConstructor;
 
@@ -70,4 +71,14 @@ public class DriverService {
         driver.setStatus(Status.fromValue(status));
         driverRepository.save(driver);
     }
+
+    public List<ApiDriver> getActiveDrivers() {
+      List<Driver> listOfDrivers = driverRepository.findAllByStatus(Status.ACTIVE);
+      return driverMapper.toApiDrivers(listOfDrivers);
+    }
+
+    public List<ApiDriver> getDriversByStatus(ApiStatus status) {
+      List<Driver> listOfDrivers = driverRepository.findAllByStatus(Status.fromValue(status.getValue()));
+      return driverMapper.toApiDrivers(listOfDrivers);
+  }
 }

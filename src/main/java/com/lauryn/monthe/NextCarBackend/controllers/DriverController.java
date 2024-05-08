@@ -35,7 +35,8 @@ public class DriverController implements DriverApi{
 
     @Override
     public ResponseEntity<List<ApiDriver>> getDrivers(Optional<ApiStatus> status) {
-        return ResponseEntity.ok(driverService.getDrivers());
+        return status.map(apiStatus -> ResponseEntity.ok(driverService.getDriversByStatus(apiStatus)))
+        .orElseGet(() -> ResponseEntity.ok(driverService.getActiveDrivers()));
     }
 
     @Override

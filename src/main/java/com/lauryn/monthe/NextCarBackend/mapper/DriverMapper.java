@@ -8,9 +8,11 @@ import org.springframework.stereotype.Component;
 
 import com.lauryn.monthe.NextCarBackend.domain.Driver;
 import com.lauryn.monthe.NextCarBackend.domain.Gender;
+import com.lauryn.monthe.NextCarBackend.domain.Status;
 import com.lauryn.monthe.nextcar.api.model.ApiDriver;
 import com.lauryn.monthe.nextcar.api.model.ApiDriverRequest;
 import com.lauryn.monthe.nextcar.api.model.ApiGender;
+import com.lauryn.monthe.nextcar.api.model.ApiStatus;
 
 import lombok.RequiredArgsConstructor;
 
@@ -32,6 +34,7 @@ public class DriverMapper {
             .address( addressMapper.toAddress(apiDriverRequest.getAddress()))
             .phoneNumber(apiDriverRequest.getPhoneNumber())
             .email(apiDriverRequest.getEmail())
+            .status(Status.ACTIVE)
             .build();
     }
 
@@ -48,6 +51,7 @@ public class DriverMapper {
             .birthday(driver.getBirthday() != null ? driver.getBirthday() : null)
             .address(addressMapper.toApiAddress(driver.getAddress()))
             .phoneNumber(driver.getPhoneNumber())
+            .status(ApiStatus.fromValue(driver.getStatus().toString()))
             .email(driver.getEmail());
     }
 
