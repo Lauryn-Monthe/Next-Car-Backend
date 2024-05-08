@@ -101,6 +101,29 @@ public class CustomerServiceTest {
     }
 
     @Test
+    public void shouldGetCustomerByEmail(){
+        var email = "lauryn@gmail.com";
+        var customer = Customer.builder().id(UUID.randomUUID().toString()).email(email).build();
+        ApiCustomer expected = new ApiCustomer().id(customer.getId());
+
+        Mockito.when(customerRepository.findByEmail(email)).thenReturn(Optional.of(customer));
+        Mockito.doReturn(expected).when(customerMapper).toApiCustomer(customer);
+
+        ApiCustomer actual = uut.getCustomerByEmail(email);
+
+        Assertions.assertThat(actual.getId()).isEqualTo(expected.getId());
+        Assertions.assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void shouldGetCustomerByEmailThrowsException() {
+        var email = "lauryn@gmail.com";
+        Mockito.when(customerRepository.findById(email)).thenThrow(new CustomerNotFound(email));
+        assertThrows(CustomerNotFound.class, () -> uut.getCustomerByEmail(email));
+    }
+
+
+    @Test
     public void shouldGetCustomerByIdThrowsException() {
         var id = UUID.randomUUID().toString();
         Mockito.when(customerRepository.findById(id)).thenThrow(new CustomerNotFound(id));
@@ -132,6 +155,7 @@ public class CustomerServiceTest {
             .firstname("firstname")
             .lastname("lastname")
             .gender(Gender.MR)
+            .password("password")
             .phoneNumber("12345")
             .address(Address.builder().city("Erlangen").country("Germany").build())
             .build();

@@ -61,4 +61,9 @@ public class DriverController implements DriverApi{
         driverService.updateDriverStatus(id, body);
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<ApiDriver> getDriverByEmail(String email) {
+        return ResponseEntity.ok(driverService.getDriverByEmail(email));
+    }
 }

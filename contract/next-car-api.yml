@@ -4,7 +4,7 @@ info:
   description: Next Car REST API
   contact:
     name: Lauryn Monthe
-    url: 'https://www.parcaune.com'
+    url: 'https://github.com/Lauryn-Monthe'
     email: laurynmonthe@yahoo.com
   license:
     name: Apache 2.0
@@ -406,7 +406,7 @@ paths:
     get:
       tags:
         - driver
-      operationId: getPatientByEmail
+      operationId: getDriverByEmail
       description: |
         Retrieve information about a driver using its email.
       summary: Retrieve driver
@@ -423,7 +423,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Customer'
+                $ref: '#/components/schemas/Driver'
         "404":
           description: The driver does not exist
           content:
@@ -491,6 +491,7 @@ components:
         - gender
         - address
         - email
+        - password
       properties:
         lastname:
           type: string
@@ -498,6 +499,8 @@ components:
         firstname:
           type: string
           maxLength: 255
+        password:
+          type: string   
         gender:
           $ref: '#/components/schemas/Gender'
         birthday:
@@ -565,7 +568,12 @@ components:
         - gender
         - address
         - email
+        - carName
+        - password
       properties:
+        carName:
+          type: string
+          maxLength: 255
         lastname:
           type: string
           maxLength: 255
@@ -582,6 +590,8 @@ components:
         phoneNumber:
           type: string
           maxLength: 20
+        password:
+          type: string  
         email:
           type: string
           maxLength: 255

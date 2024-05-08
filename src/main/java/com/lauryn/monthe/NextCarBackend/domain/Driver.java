@@ -35,6 +35,9 @@ public class Driver {
     @Column(name = "FIRSTNAME")
     private String firstname;
 
+    @Column(name = "CAR_NAME")
+    private String carName;
+
     @Column(name = "GENDER")
     @Enumerated(EnumType.STRING)
     private Gender gender;
@@ -48,6 +51,9 @@ public class Driver {
 
     @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
+
+    @Column(name = "PASSWORD", nullable = false)
+    private String password;
 
     @Column(name = "STATUS", nullable = false)
     @Enumerated(EnumType.STRING)

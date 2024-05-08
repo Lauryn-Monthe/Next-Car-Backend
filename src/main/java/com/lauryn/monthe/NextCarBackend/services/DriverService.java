@@ -49,6 +49,7 @@ public class DriverService {
         driver.getAddress().setPostalCode(apiDriverRequest.getAddress().getPostalCode().toString());
         driver.getAddress().setStreetAndNumber(apiDriverRequest.getAddress().getStreetAndNumber().toString());
         driver.getAddress().setCountry(apiDriverRequest.getAddress().getCountry());
+        driver.setPassword(apiDriverRequest.getPassword());
         Driver updatedDriver = driverRepository.save(driver);
         return driverMapper.toApiDriver(updatedDriver);
       }
@@ -80,5 +81,10 @@ public class DriverService {
     public List<ApiDriver> getDriversByStatus(ApiStatus status) {
       List<Driver> listOfDrivers = driverRepository.findAllByStatus(Status.fromValue(status.getValue()));
       return driverMapper.toApiDrivers(listOfDrivers);
-  }
+    }
+
+    public ApiDriver getDriverByEmail(String email){
+      var driver = driverRepository.findByEmail(email).orElseThrow(() -> new DriverNotFound(email));
+      return driverMapper.toApiDriver(driver);
+    }
 }

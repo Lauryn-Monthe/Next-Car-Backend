@@ -57,6 +57,7 @@ public class DriverMapperTest {
             .email("driver@parcaune.com")
             .address(addressMapper.toApiAddress(address))
             .gender(ApiGender.fromValue(Gender.MR.getValue()))
+            .carName("carName")
             .birthday(LocalDate.of(2016, 8, 9));
 
         Driver expected = Driver.builder()
@@ -67,6 +68,7 @@ public class DriverMapperTest {
             .address(addressMapper.toAddress(apiAddress))
             .phoneNumber("phoneNumber")
             .status(Status.ACTIVE)
+            .carName("carName")
             .email("driver@parcaune.com")
             .build();
 
@@ -89,6 +91,7 @@ public class DriverMapperTest {
             .address(addressMapper.toAddress(apiAddress))
             .phoneNumber("phoneNumber")
             .status(Status.ACTIVE)
+            .carName("carName")
             .email("driver@parcaune.com")
             .build();
 
@@ -101,6 +104,7 @@ public class DriverMapperTest {
             .birthday(LocalDate.of(2016, 8, 9))
             .address(new ApiAddress().country("ad1").city("ad2").postalCode( "ad3").streetAndNumber("ad4"))
             .phoneNumber("phoneNumber")
+            .carName("carName")
             .email("driver@parcaune.com");
 
         ApiDriver actual = uut.toApiDriver(driver);

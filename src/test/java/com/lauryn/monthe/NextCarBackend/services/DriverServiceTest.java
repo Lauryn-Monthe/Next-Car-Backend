@@ -145,6 +145,7 @@ public class DriverServiceTest {
             .firstname("firstname")
             .lastname("lastname")
             .gender(Gender.MR)
+            .password("password")
             .phoneNumber("12345")
             .address(Address.builder().city("Erlangen").country("Germany").build())
             .build();
@@ -158,5 +159,27 @@ public class DriverServiceTest {
         assertEquals(apiDriverRequest.getPhoneNumber(), actualDriver.getPhoneNumber());
         Mockito.verify(driverRepository).findById(anyString());
         Mockito.verify(driverRepository).save(any(Driver.class));
+    }
+
+    @Test
+    public void shouldGetDriverByEmail(){
+        var email = "lauryn@gmail.com";
+        var driver = Driver.builder().id(UUID.randomUUID().toString()).email(email).build();
+        ApiDriver expected = new ApiDriver().id(driver.getId());
+
+        Mockito.when(driverRepository.findByEmail(email)).thenReturn(Optional.of(driver));
+        Mockito.doReturn(expected).when(driverMapper).toApiDriver(driver);
+
+        ApiDriver actual = uut.getDriverByEmail(email);
+
+        Assertions.assertThat(actual.getId()).isEqualTo(expected.getId());
+        Assertions.assertThat(actual).isEqualTo(expected);
+    }
+
+    @Test
+    public void shouldGetDriverByEmailThrowsException() {
+        var email = "lauryn@gmail.com";
+        Mockito.when(driverRepository.findById(email)).thenThrow(new DriverNotFound(email));
+        assertThrows(DriverNotFound.class, () -> uut.getDriverByEmail(email));
     }
 }

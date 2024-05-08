@@ -43,6 +43,7 @@ public class CustomerService {
         customer.setGender(Gender.fromValue(apiCustomerRequest.getGender().getValue()));
         customer.setEmail(apiCustomerRequest.getEmail());
         customer.setPhoneNumber(apiCustomerRequest.getPhoneNumber());
+        customer.setPassword(apiCustomerRequest.getPassword());
         customer.getAddress().setCity(apiCustomerRequest.getAddress().getCity());
         customer.getAddress().setPostalCode(apiCustomerRequest.getAddress().getPostalCode().toString());
         customer.getAddress().setStreetAndNumber(apiCustomerRequest.getAddress().getStreetAndNumber().toString());
@@ -59,5 +60,10 @@ public class CustomerService {
       public void deleteCustomer(String id) {
         var customer = findCustomerById(id);
         customerRepository.delete(customer);
+      }
+
+      public ApiCustomer getCustomerByEmail(String email){
+        var customer = customerRepository.findByEmail(email).orElseThrow(() -> new CustomerNotFound(email));
+        return customerMapper.toApiCustomer(customer);
       }
 }

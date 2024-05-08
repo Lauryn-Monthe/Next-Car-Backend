@@ -53,4 +53,9 @@ public class CustomerController implements CustomerApi{
         return ResponseEntity.ok(customerService.getCustomerById(id));
     }
 
+    @Override
+    public ResponseEntity<ApiCustomer> getCustomerByEmail(String email) {
+        return ResponseEntity.ok(customerService.getCustomerByEmail(email));
+    }
+
 }

@@ -31,6 +31,7 @@ public class CustomerMapper {
             .birthday( apiCustomerRequest.getBirthday() != null ?  apiCustomerRequest.getBirthday() : null  )
             .address( addressMapper.toAddress(apiCustomerRequest.getAddress()))
             .phoneNumber(apiCustomerRequest.getPhoneNumber())
+            .password(apiCustomerRequest.getPassword())
             .email(apiCustomerRequest.getEmail())
             .build();
     }
@@ -48,6 +49,7 @@ public class CustomerMapper {
             .birthday(customer.getBirthday() != null ? customer.getBirthday() : null)
             .address(addressMapper.toApiAddress(customer.getAddress()))
             .phoneNumber(customer.getPhoneNumber())
+            .password(customer.getPassword())
             .email(customer.getEmail());
     }
 

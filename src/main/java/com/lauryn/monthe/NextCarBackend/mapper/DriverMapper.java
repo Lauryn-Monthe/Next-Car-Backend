@@ -34,6 +34,8 @@ public class DriverMapper {
             .address( addressMapper.toAddress(apiDriverRequest.getAddress()))
             .phoneNumber(apiDriverRequest.getPhoneNumber())
             .email(apiDriverRequest.getEmail())
+            .password(apiDriverRequest.getPassword())
+            .carName(apiDriverRequest.getCarName())
             .status(Status.ACTIVE)
             .build();
     }
@@ -51,6 +53,8 @@ public class DriverMapper {
             .birthday(driver.getBirthday() != null ? driver.getBirthday() : null)
             .address(addressMapper.toApiAddress(driver.getAddress()))
             .phoneNumber(driver.getPhoneNumber())
+            .carName(driver.getCarName())
+            .password(driver.getPassword())
             .status(ApiStatus.fromValue(driver.getStatus().toString()))
             .email(driver.getEmail());
     }
