@@ -17,7 +17,7 @@ tags:
   - name: Greeting
     description: Greeting Controller
   - name: customer
-    description: Manage Clients
+    description: Manage Customers
   - name: driver
     description: Manage Drivers
   - name: appointment
@@ -64,12 +64,6 @@ paths:
       operationId: getCustomers
       description: Get list of customers
       summary: Returns a list of customers
-      parameters:
-        - in: query
-          name: status
-          schema:
-            $ref: '#/components/schemas/Status'
-          description: Status of the customer
       responses:
         "200":
           description: OK
@@ -123,7 +117,7 @@ paths:
     put:
       tags:
         - customer
-      operationId: updateClient
+      operationId: updateCustomer
       description: Update a customer's account via the API.
       summary: Updating a customer's account
       parameters:
@@ -156,7 +150,7 @@ paths:
     delete:
       tags:
         - customer
-      operationId: deleteClient
+      operationId: deleteCustomer
       description: delete a customer's account via the API.
       summary: Deleting a customer's account
       parameters:
@@ -185,7 +179,7 @@ paths:
     get:
       tags:
         - customer
-      operationId: getClientByEmail
+      operationId: getCustomerByEmail
       description: |
         Retrieve information about a customer using its email.
       summary: Retrieve customer
@@ -216,46 +210,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Error'
 
-  /api/customers/{id}/update-status:
-    put:
-      tags:
-        - customer
-      operationId: updateClientStatus
-      description: Update a customer's status via the API.
-      summary: Updating a customer's status
-      parameters:
-        - name: id
-          in: path
-          required: true
-          schema:
-            type: string
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/Status'
-      responses:
-        "204":
-          description: The status was successfully updated
-        "404":
-          description: The status does not exist
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        "500":
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-
   /api/customers/search-customers:
     get:
       tags:
         - customer
-      operationId: searchClients
+      operationId: searchCustomers
       description: |
         Get list of customers using its lastname or city.
       summary: Retrieve customers
@@ -695,7 +654,7 @@ components:
       type: string
       enum:
         - ACTIVE
-        - BLOCKED
+        - BUSY
 
     InvitationStatus:
       type: string

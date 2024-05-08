@@ -40,10 +40,6 @@ public class Customer {
     @Enumerated(EnumType.STRING)
     private Gender gender;
 
-    /* @Column(name = "STATUS", nullable = false)
-    @Enumerated(EnumType.STRING)
-    private Status status; */
-
     @JsonFormat(pattern = "dd/MM/yyyy", shape = JsonFormat.Shape.STRING)
     @Column(name = "BIRTHDAY")
     private LocalDate birthday;

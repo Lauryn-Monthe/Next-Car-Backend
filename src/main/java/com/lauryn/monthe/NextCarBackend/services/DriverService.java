@@ -1,9 +1,12 @@
 package com.lauryn.monthe.NextCarBackend.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.lauryn.monthe.NextCarBackend.domain.Driver;
 import com.lauryn.monthe.NextCarBackend.domain.Gender;
+import com.lauryn.monthe.NextCarBackend.domain.Status;
 import com.lauryn.monthe.NextCarBackend.exceptions.DriverNotFound;
 import com.lauryn.monthe.NextCarBackend.mapper.DriverMapper;
 import com.lauryn.monthe.NextCarBackend.repositories.DriverRepository;
@@ -33,19 +36,38 @@ public class DriverService {
         return driverRepository.findById(id).orElseThrow(() -> new DriverNotFound(id));
     }
 
-    public ApiDriver updateCustomer(String id, ApiDriverRequest apiCustomerRequest) {
+    public ApiDriver updateDriver(String id, ApiDriverRequest apiDriverRequest) {
         var driver = findDriverById(id);
-        driver.setFirstname(apiCustomerRequest.getFirstname());
-        driver.setLastname(apiCustomerRequest.getLastname());
-        driver.setBirthday(apiCustomerRequest.getBirthday());
-        driver.setGender(Gender.fromValue(apiCustomerRequest.getGender().getValue()));
-        driver.setEmail(apiCustomerRequest.getEmail());
-        driver.setPhoneNumber(apiCustomerRequest.getPhoneNumber());
-        driver.getAddress().setCity(apiCustomerRequest.getAddress().getCity());
-        driver.getAddress().setPostalCode(apiCustomerRequest.getAddress().getPostalCode().toString());
-        driver.getAddress().setStreetAndNumber(apiCustomerRequest.getAddress().getStreetAndNumber().toString());
-        driver.getAddress().setCountry(apiCustomerRequest.getAddress().getCountry());
+        driver.setFirstname(apiDriverRequest.getFirstname());
+        driver.setLastname(apiDriverRequest.getLastname());
+        driver.setBirthday(apiDriverRequest.getBirthday());
+        driver.setGender(Gender.fromValue(apiDriverRequest.getGender().getValue()));
+        driver.setEmail(apiDriverRequest.getEmail());
+        driver.setPhoneNumber(apiDriverRequest.getPhoneNumber());
+        driver.getAddress().setCity(apiDriverRequest.getAddress().getCity());
+        driver.getAddress().setPostalCode(apiDriverRequest.getAddress().getPostalCode().toString());
+        driver.getAddress().setStreetAndNumber(apiDriverRequest.getAddress().getStreetAndNumber().toString());
+        driver.getAddress().setCountry(apiDriverRequest.getAddress().getCountry());
         Driver updatedDriver = driverRepository.save(driver);
         return driverMapper.toApiDriver(updatedDriver);
       }
+
+      public List<ApiDriver> getDrivers() {
+        List<Driver> listOfCustomers = driverRepository.findAll();
+        return driverMapper.toApiDrivers(listOfCustomers);
+      }
+
+      public void deleteDriver(String id) {
+        var customer = findDriverById(id);
+        driverRepository.delete(customer);
+      }
+
+      public void updateDriverStatus(String id, String status) {
+        if (status == null) {
+            throw new RuntimeException("status can not be null");
+        }
+        var driver = driverRepository.findById(id).orElseThrow(() -> new DriverNotFound(id));
+        driver.setStatus(Status.fromValue(status));
+        driverRepository.save(driver);
+    }
 }

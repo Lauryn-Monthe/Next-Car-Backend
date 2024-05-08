@@ -1,5 +1,7 @@
 package com.lauryn.monthe.NextCarBackend.services;
 
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 import com.lauryn.monthe.NextCarBackend.domain.Customer;
@@ -47,5 +49,15 @@ public class CustomerService {
         customer.getAddress().setCountry(apiCustomerRequest.getAddress().getCountry());
         Customer updatedCustomer = customerRepository.save(customer);
         return customerMapper.toApiCustomer(updatedCustomer);
+      }
+
+      public List<ApiCustomer> getCustomers() {
+        List<Customer> listOfCustomers = customerRepository.findAll();
+        return customerMapper.toApiCustomers(listOfCustomers);
+      }
+
+      public void deleteCustomer(String id) {
+        var customer = findCustomerById(id);
+        customerRepository.delete(customer);
       }
 }

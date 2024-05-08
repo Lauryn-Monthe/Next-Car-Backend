@@ -49,9 +49,9 @@ public class Driver {
     @Column(name = "PHONE_NUMBER")
     private String phoneNumber;
 
-    /* @Column(name = "STATUS", nullable = false)
+    @Column(name = "STATUS", nullable = false)
     @Enumerated(EnumType.STRING)
-    private Status status; */
+    private Status status;
 
     @Column(name = "EMAIL", unique = true, nullable = false)
     @Email(regexp = "^[_a-z0-9\\-]+(\\.[_a-z0-9\\-]+)*@[a-z0-9\\-]+(\\.[A-Za-z0-9\\-]+)*\\.[0-9a-z]{2,}$")
